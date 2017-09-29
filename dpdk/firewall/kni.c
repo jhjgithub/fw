@@ -208,7 +208,7 @@ kni_fwd_pkts_to_kernel(struct worker_lc_cfg *lp, uint32_t burst)
 		struct rte_mbuf **ibuf = lp->ibuf.array;
 		uint32_t base, cur, n_rx, n_tx, port;
 
-		n_rx = rte_ring_sc_dequeue_burst(iring, (void **)ibuf, burst);
+		n_rx = rte_ring_sc_dequeue_burst(iring, (void **)ibuf, burst, NULL);
 		if (unlikely(n_rx > burst)) {
 			RTE_LOG(CRIT, USER1, "KNI: error receiving on ring!\n");
 			return n_pkts;
@@ -288,12 +288,13 @@ kni_fwd_pkts_to_nic(struct worker_lc_cfg *lp, uint32_t burst)
 		for (i = 0; i < n_rx; i++) {
 			outbuf[i]->port = port;
 			outbuf[i]->udata64 |=
-			    PKT_META_ROUTED | PKT_META_VLAN_TAG;
+				PKT_META_ROUTED | PKT_META_VLAN_TAG;
 		}
 
 		/* Burst packets to IO tx lcore */
-		n_tx = rte_ring_sp_enqueue_burst(
-		    lp->orings[port], (void **)outbuf, n_rx);
+		n_tx = rte_ring_sp_enqueue_burst(lp->orings[port], (void **)outbuf, n_rx, NULL);
+
+		//ret = rte_ring_sp_enqueue_burst(rx_conf->ring[worker_id], (void **) pkts_burst, nb_rx, NULL);
 
 		if (unlikely(n_tx < n_rx)) {
 			util_free_mbufs_burst(&outbuf[n_tx], n_rx - n_tx);

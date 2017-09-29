@@ -35,7 +35,8 @@
 #include "runtime.h"
 #include "packet.h"
 
-inline uint32_t
+//inline uint32_t
+uint32_t
 pkt_type(struct rte_mbuf *m)
 {
 	const uint8_t *payload;

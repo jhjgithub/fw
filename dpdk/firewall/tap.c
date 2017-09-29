@@ -136,7 +136,7 @@ tap_fwd_pkts_to_kernel(struct worker_lc_cfg *lp, uint32_t burst)
 		ssize_t ret;
 		int fd;
 
-		n_rx = rte_ring_sc_dequeue_burst(iring, (void **)ibuf, burst);
+		n_rx = rte_ring_sc_dequeue_burst(iring, (void **)ibuf, burst, NULL);
 		if (unlikely(n_rx > burst)) {
 			RTE_LOG(CRIT, USER1, "TAP: error receiving on ring!\n");
 			return n_rx;
@@ -226,7 +226,7 @@ tap_fwd_pkts_to_nic(struct worker_lc_cfg *lp, uint32_t burst)
 			m->udata64 |= PKT_META_ROUTED | PKT_META_VLAN_TAG;
 
 			ret = rte_ring_sp_enqueue_burst(
-			    lp->orings[port], (void **)&m, 1);
+			    lp->orings[port], (void **)&m, 1, NULL);
 			if (unlikely(ret < 1)) {
 				rte_pktmbuf_free(m);
 			}

@@ -96,7 +96,8 @@ nat_ip_4pkts(struct rte_mbuf *m[4], struct rte_hash *ht, uint32_t *ipaddrs,
 	addrs[2] = get_ip_addr(hdrs[2], type[2]);
 	addrs[3] = get_ip_addr(hdrs[3], type[3]);
 
-	rte_hash_lookup_multi(ht, (const void **)&addrs[0], 4, ret);
+	//rte_hash_lookup_multi(ht, (const void **)&addrs[0], 4, ret);
+	rte_hash_lookup_bulk(ht, (const void **)&addrs[0], 4, ret);
 
 	nat_ip_addr(addrs[0], ret[0], ipaddrs);
 	nat_ip_addr(addrs[1], ret[1], ipaddrs);

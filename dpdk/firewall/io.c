@@ -91,7 +91,7 @@ __attribute__((always_inline))
 	ret = rte_ring_sp_enqueue_bulk(
 	    lp->rx.rings[worker],
 	    (void **)lp->rx.obuf[worker].array,
-	    n_mbufs);
+	    n_mbufs, NULL);
 
 	if (unlikely(ret == -ENOBUFS)) {
 		util_free_mbufs_burst(lp->rx.obuf[worker].array, n_mbufs);
@@ -207,7 +207,7 @@ flush_rx_buffers(struct io_lc_cfg *lp, uint32_t n_workers)
 		ret = rte_ring_sp_enqueue_bulk(
 		    lp->rx.rings[worker],
 		    (void **)lp->rx.obuf[worker].array,
-		    lp->rx.obuf[worker].n_mbufs);
+		    lp->rx.obuf[worker].n_mbufs, NULL);
 
 		if (unlikely(ret < 0)) {
 			util_free_mbufs_burst(lp->rx.obuf[worker].array,
@@ -238,7 +238,7 @@ tx_nic_pkts(struct io_lc_cfg *lp, uint32_t n_workers,
 			n_pkts = rte_ring_sc_dequeue_burst(
 			    ring,
 			    (void **)&lp->tx.obuf[port].array[n_mbufs],
-			    r_burst);
+			    r_burst, NULL);
 
 			if (unlikely(n_pkts == 0)) {
 				continue;

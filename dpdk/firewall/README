@@ -1,0 +1,6 @@
+1) dpdk setup 
+export RTE_SDK=`pwd`
+export RTE_TARGET=x86_64-native-linuxapp-gcc
+
+2) apt-get install
+

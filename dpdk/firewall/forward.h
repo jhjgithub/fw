@@ -102,7 +102,7 @@ __attribute__((always_inline))
 	ret = rte_ring_sp_enqueue_bulk(
 	    lp->orings[port],
 	    (void **)lp->obuf[port].array,
-	    burst);
+	    burst, NULL);
 
 	if (unlikely(ret == -ENOBUFS)) {
 		util_free_mbufs_burst(lp->obuf[port].array, n_mbufs);
@@ -133,7 +133,7 @@ __attribute__((always_inline))
 	ret = rte_ring_sp_enqueue_bulk(
 	    ring->ring,
 	    (void **)ring->obuf.array,
-	    burst);
+	    burst, NULL);
 
 	if (unlikely(ret == -ENOBUFS)) {
 		util_free_mbufs_burst(ring->obuf.array, n_mbufs);
